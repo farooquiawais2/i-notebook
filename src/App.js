@@ -1,9 +1,12 @@
 import './App.css';
 import Router from './components/Router';
+import NodeState from './context/note/NodeState';
 
 function App() {
   return (
-    <Router />
+    <NodeState>
+      <Router />
+    </NodeState>
   );
 }
 
