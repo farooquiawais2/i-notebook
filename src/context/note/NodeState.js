@@ -1,40 +1,73 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NodeContext from './NodeContext';
 
+
 const NoteState = ( props ) => {
-  const initialNotes = 
-  [
-    {
-      "_id": "64d7b5e9bead700311e27d82",
-      "userId": "64d777187fb0865fd74a2f58",
-      "title": "Namze",
-      "description": "Isha namaz",
-      "tag": "General",
-      "date": "2023-08-12T16:40:09.797Z",
-      "__v": 0
-    },
-    {
-      "_id": "64d7b619bead700311e27d84",
-      "userId": "64d777187fb0865fd74a2f58",
-      "title": "Namze",
-      "description": "Isha namaz",
-      "tag": "Islam",
-      "date": "2023-08-12T16:40:57.856Z",
-      "__v": 0
-    },
-    {
-      "_id": "64e1d1d242fd55d46b23f41a",
-      "userId": "64d777187fb0865fd74a2f58",
-      "title": "Namze",
-      "description": "Isha namaz",
-      "tag": "Islam",
-      "date": "2023-08-20T08:41:54.858Z",
-      "__v": 0
-    }
-  ];
+  const host = "http://localhost:5000"
+  const initialNotes = [];
   const [ notes, setNotes ] = useState( initialNotes );
+
+  // Get all the notes
+  const getNotes = async () => {
+    // API Call 
+    const url = `${ host }/api/notes/fetch-all-notes`;
+    const response = await fetch( url, {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDc3NzE4N2ZiMDg2NWZkNzRhMmY1OCIsImlhdCI6MTY5MjU0ODczNH0.V2vkFMJE3WFthkGm8o438v6wXJ7u_2-WKr5j2npb0UE"
+      }
+    } );
+    const json = await response.json()
+    setNotes( json )
+  }
+
+  // Add a Note
+  const addNote = async ( note ) => {
+    console.log('ddd');
+    const url = `${ host }/api/notes/add-notes`;
+    const response = await fetch( url, {
+      method: 'POST',
+      headers: {
+        'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDc3NzE4N2ZiMDg2NWZkNzRhMmY1OCIsImlhdCI6MTY5MjU0ODczNH0.V2vkFMJE3WFthkGm8o438v6wXJ7u_2-WKr5j2npb0UE"
+      },
+      body: JSON.stringify( note)
+    } );
+    const json = await response.json()
+
+    notes.push( json );
+    setNotes( notes );
+  }
+
+  // Delete note api
+  const deleteNote = async ( id ) => {
+    
+    const url = `${ host }/api/notes/delete-notes/${ id }`;
+    const response = await fetch( url, {
+      method: 'POST',
+      headers: {
+        'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDc3NzE4N2ZiMDg2NWZkNzRhMmY1OCIsImlhdCI6MTY5MjU0ODczNH0.V2vkFMJE3WFthkGm8o438v6wXJ7u_2-WKr5j2npb0UE"
+      }
+    } );
+    const updatedList = await getNotes()
+
+    setNotes( updatedList );
+  }
+
+  // Edit note api
+  const updateNote = ( id ) => {
+    console.log('updateNote called ', id);
+  
+  }
+
+
   return (
-    <NodeContext.Provider value={{notes, setNotes}}>
+    <NodeContext.Provider value={{ notes, setNotes, addNote, deleteNote, updateNote, getNotes }}>
       {props.children}
     </NodeContext.Provider>
   );
