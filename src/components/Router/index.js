@@ -3,6 +3,7 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import Home from "../Home";
 import About from "../About";
 import Nav from '../Nav';
+import UpdateNoteForm from '../UpdateNote';
 
 export default function Router() {
   return (
@@ -10,6 +11,7 @@ export default function Router() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
+        <Route path="/update-note/:id" element={<UpdateNoteForm />} />
 
         <Route path="*" element={<Home />} />
       </Route>

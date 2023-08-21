@@ -60,8 +60,22 @@ const NoteState = ( props ) => {
   }
 
   // Edit note api
-  const updateNote = ( id ) => {
-    console.log('updateNote called ', id);
+  const updateNote = async ( id, note ) => {
+    const url = `${ host }/api/notes/update-notes/${ id }`;
+    const response = await fetch( url, {
+      method: 'PUT',
+      headers: {
+        'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDc3NzE4N2ZiMDg2NWZkNzRhMmY1OCIsImlhdCI6MTY5MjU0ODczNH0.V2vkFMJE3WFthkGm8o438v6wXJ7u_2-WKr5j2npb0UE"
+      },
+      body: JSON.stringify( note)
+    } );
+    const json = await response.json()
+
+    const updatedList = await getNotes()
+
+    setNotes( updatedList );
   
   }
 

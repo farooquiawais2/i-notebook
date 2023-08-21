@@ -11,7 +11,7 @@ const NoteItem = ( props ) => {
         <p className="card-text">{note.description}.</p>
         <Link to="#" className="btn btn-primary">{note.tag}</Link>
         <button className="btn btn-danger" onClick={() => deleteNote(note._id)}>Delete</button>
-        <button className="btn btn-success" onClick={() => updateNote(note._id)}>Update</button>
+        <Link className="btn btn-success" to={`/update-note/${note._id}`}>Update</Link>
       </div>
     </div>
   );
