@@ -1,11 +1,19 @@
 import { useEffect } from 'react';
 import {
-  Link, useLocation
+  Link, useLocation, useNavigate
 } from "react-router-dom";
+import { isLoggedIn } from '../Router';
+
+
 function Nav() {
   const location = useLocation();
-  useEffect(() => {
-  }, [location]);
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem( 'token' );
+    navigate( '/login' );
+  };
+  useEffect( () => {
+  }, [ location ] );
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <Link className="navbar-brand" to="/">iNoteBook</Link>
@@ -16,19 +24,30 @@ function Nav() {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/">Home</Link>
+            <Link className={`nav-link ${ location.pathname === '/' ? 'active' : '' }`} to="/">Home</Link>
           </li>
           <li className="nav-item">
-            <Link className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} to="/about">About</Link>
+            <Link className={`nav-link ${ location.pathname === '/about' ? 'active' : '' }`} to="/about">About</Link>
           </li>
           <li className="nav-item">
-            <Link className={`nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`} to="/dashboard">Dashboard</Link>
+            <Link className={`nav-link ${ location.pathname === '/dashboard' ? 'active' : '' }`} to="/dashboard">Dashboard</Link>
           </li>
           <li className="nav-item">
-            <Link className={`nav-link ${location.pathname === '/nothing-here' ? 'active' : ''}`} to="/nothing-here">Nothing Here</Link>
+            <Link className={`nav-link ${ location.pathname === '/nothing-here' ? 'active' : '' }`} to="/nothing-here">Nothing Here</Link>
           </li>
         </ul>
       </div>
+      {!
+        isLoggedIn ?
+        <form className="d-flex">
+          <Link className="btn btn-primary mx-1" to="/login" role="button">Login</Link>
+          <Link className="btn btn-primary mx-1" to="/signup" role="button">Signup</Link>
+        </form>
+        :
+        <form className="d-flex">
+          <div className="btn btn-primary mx-1" role="button" onClick={logout}>Logout</div>
+        </form>
+      }
     </nav>
   );
 }
